@@ -18,7 +18,8 @@ myopt = matrix(c('help','h',0,"logical",
     'thred','t',2,"double", 
     'initial_per', 'e', 2, "double",
     'ctg_len_trim','l',2,'integer',
-    'plot_bic','p',2,'character'),byrow=TRUE,ncol=4)
+    'plot_bic','p',2,'character'
+    'auto_method','m',1,'integer'),byrow=TRUE,ncol=4)
 
 opt=getopt(myopt)
 
@@ -35,7 +36,7 @@ if ( is.null(opt$thred ) ) { opt$thred = 0.1 }
 if ( is.null(opt$initial_per ) ) { opt$initial_per = 1 }
 if ( is.null(opt$ctg_len_trim ) ) { opt$ctg_len_trim = 500 }
 if ( is.null(opt$plot_bic ) ) { opt$plot_bic = "F" }
-
+if ( is.null(opt$auto_method ) ) { opt$auto_method = 1 }
 
 
 work_dir <- opt$work_dir
@@ -187,19 +188,35 @@ for(i in 1:length(ls)){
 
 bic = -2 * lscore + (vncl*ncol(dmat) + vncl) * log(dim(dmat_in)[1])
 
-bic.diff = diff(bic)
-bic.ratio = NULL
-for(i in 1:(length(bic.diff)-1)){
-    bic.ratio[i] = bic.diff[i+1]/bic.diff[i]
+if(opt$auto_method==1){
+    bic.diff = diff(bic)
+    bic.ratio = NULL
+    for(i in 1:(length(bic.diff)-1)){
+        bic.ratio[i] = bic.diff[i+1]/bic.diff[i]
+    }
+
+    if(length(which(bic.ratio<0.05))==0){
+        opt_num_cluster = max(vncl)
+    }else{
+        opt_num_cluster = which(bic.ratio<0.05)[1] + 2
+    }
+
+    cat("The optimal number of cluster is",opt_num_cluster,"\n")
+}else if(opt$auto_method==2){
+    bic_ind1 = which(bic > (max(bic) - min(bic))*0.05 + min(bic))
+    fit = lm(log(bic[bic_ind1])~vncl[bic_ind1])
+    a = fit$coef[2]
+    c = fit$coef[1]
+    ncl_cut = min(ceiling((min(log(bic)) - c)/a*1.3), vncl[which.min(bic)])
+    bic_ind2 = 1:min(which(vncl>=ncl_cut))
+    fit = lm(log(bic[bic_ind2])~vncl[bic_ind2])
+    a = fit$coef[2]
+    c = fit$coef[1]
+    opt_num_cluster = round((min(log(bic)) - c)/a)
+
+    cat("The optimal number of cluster is",opt_num_cluster,"\n")
 }
 
-if(length(which(bic.ratio<0.05))==0){
-    opt_num_cluster = max(vncl)
-}else{
-    opt_num_cluster = which(bic.ratio<0.05)[1] + 2
-}
-
-cat("The optimal number of cluster is",opt_num_cluster,"\n")
 
 ##Output the BIC graph
 if(plot_bic=="T"){
