@@ -11,15 +11,15 @@ library(getopt)
 myopt = matrix(c('help','h',0,"logical",
     'work_dir','w',1,"character",
     'metagen_path','m',1,"character",
-    'num_threads','n',2,"integer",
+    'num_cup_cores','n',2,"integer",
     'bic_step','s',2,"integer",
     'bic_min','i',2,"integer",
     'bic_max','a',2,"integer",
     'thred','t',2,"double", 
     'initial_per', 'e', 2, "double",
     'ctg_len_trim','l',2,'integer',
-    'plot_bic','p',2,'character'
-    'auto_method','m',1,'integer'),byrow=TRUE,ncol=4)
+    'plot_bic','p',2,'character',
+    'auto_method','o',1,'integer'),byrow=TRUE,ncol=4)
 
 opt=getopt(myopt)
 
@@ -80,32 +80,46 @@ ext = ext_temp[length(ext_temp)]
 sample_name = colnames(dmat)
 
 if(ext=="fasta"){
-    for(i in 1:nrow(reads_sum)){
-        filename = as.character(reads_sum[i, 2])
-        t_len = length(strsplit(filename,"/")[[1]])
-        filename_s = strsplit(filename,"/")[[1]][t_len]
-        if(grepl("_1.fasta",filename_s)){
-            nvec[which(strsplit(filename_s,"_")[[1]][1]==sample_name)] = reads_sum[i,5]
-        }else if(grepl("_2.fasta",filename_s)){
-            next
-        }else if(grepl(".fasta",filename_s)){
-            nvec[which(strsplit(filename_s,"[.]")[[1]][1]==sample_name)] = reads_sum[i,5]
+    filename = as.character(reads_sum[1, 2])
+    t_len = length(strsplit(filename,"/")[[1]])
+    filename_s = strsplit(filename,"/")[[1]][t_len]
+    if(grepl("_1.fasta",filename_s)){
+        for(i in 1:nrow(reads_sum)){
+            filename = as.character(reads_sum[i, 2])
+            t_len = length(strsplit(filename,"/")[[1]])
+            filename_s = strsplit(filename,"/")[[1]][t_len]
+            if(grepl("_1.fasta",filename_s)){
+                nvec[which(strsplit(filename_s,"_")[[1]][1]==sample_name)] = reads_sum[i,5]
+            }else if(grepl("_2.fasta",filename_s)){
+                next
+            }else if(grepl(".fasta",filename_s)){
+                nvec[which(strsplit(filename_s,"[.]")[[1]][1]==sample_name)] = reads_sum[i,5]
+            }
         }
+    }else{
+        nvec = reads_sum[,5]
     }
 }
 
 if(ext=="fastq"){
-    for(i in 1:nrow(reads_sum)){
-        filename = as.character(reads_sum[i, 2])
-        t_len = length(strsplit(filename,"/")[[1]])
-        filename_s = strsplit(filename,"/")[[1]][t_len]
-        if(grepl("_1.fastq",filename_s)){
-            nvec[which(strsplit(filename_s,"_")[[1]][1]==sample_name)] = reads_sum[i,5]
-        }else if(grepl("_2.fastq",filename_s)){
-            next
-        }else if(grepl(".fastq",filename_s)){
-            nvec[which(strsplit(filename_s,"[.]")[[1]][1]==sample_name)] = reads_sum[i,5]
+    filename = as.character(reads_sum[1, 2])
+    t_len = length(strsplit(filename,"/")[[1]])
+    filename_s = strsplit(filename,"/")[[1]][t_len]
+    if(grepl("_1.fasta",filename_s)){
+        for(i in 1:nrow(reads_sum)){
+            filename = as.character(reads_sum[i, 2])
+            t_len = length(strsplit(filename,"/")[[1]])
+            filename_s = strsplit(filename,"/")[[1]][t_len]
+            if(grepl("_1.fastq",filename_s)){
+                nvec[which(strsplit(filename_s,"_")[[1]][1]==sample_name)] = reads_sum[i,5]
+            }else if(grepl("_2.fastq",filename_s)){
+                next
+            }else if(grepl(".fastq",filename_s)){
+                nvec[which(strsplit(filename_s,"[.]")[[1]][1]==sample_name)] = reads_sum[i,5]
+            }
         }
+    }else{
+        nvec = reads_sum[,5]
     }
 }
 
