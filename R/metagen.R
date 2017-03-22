@@ -62,7 +62,7 @@ sourceCpp(source_code)
 
 ###Load the input data set
 rcmm_file=paste(work_dir,"/output/count-map.tsv",sep="")
-ctg_file=paste(work_dir,"/ray/Contigs.fasta",sep="")
+ctg_file=paste(work_dir,"/contigs/Contigs.fasta",sep="")
 dmat = as.matrix(read.table(rcmm_file,header=T,check.names = FALSE))
 fadat = read.fasta(file = ctg_file)
 
