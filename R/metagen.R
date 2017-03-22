@@ -72,56 +72,60 @@ lvec = as.numeric(unlist(lapply(getAnnot(fadat), function(x){strsplit(x," ")[[1]
 
 nvec = numeric(ncol(dmat))
 
-reads_sum = read.table(paste(work_dir,"/ray/FilePartition.txt",sep=""), header=F)
+# reads_sum = read.table(paste(work_dir,"/ray/FilePartition.txt",sep=""), header=F)
+
+reads_sum = read.table(paste(work_dir,"/reads_info.txt",sep=""), sep=",", header=T)
+nvec = reads_sum[,3]
+sample_name = reads_sum[,1]
 
 ##Find the extension of the sequence files
-ext_temp = strsplit(as.character(reads_sum[1, 2]),"[.]")[[1]]
-ext = ext_temp[length(ext_temp)]
-sample_name = colnames(dmat)
+# ext_temp = strsplit(as.character(reads_sum[1, 2]),"[.]")[[1]]
+# ext = ext_temp[length(ext_temp)]
+# sample_name = colnames(dmat)
 
-if(ext=="fasta"){
-    filename = as.character(reads_sum[1, 2])
-    t_len = length(strsplit(filename,"/")[[1]])
-    filename_s = strsplit(filename,"/")[[1]][t_len]
-    if(grepl("_1.fasta",filename_s)){
-        for(i in 1:nrow(reads_sum)){
-            filename = as.character(reads_sum[i, 2])
-            t_len = length(strsplit(filename,"/")[[1]])
-            filename_s = strsplit(filename,"/")[[1]][t_len]
-            if(grepl("_1.fasta",filename_s)){
-                nvec[which(strsplit(filename_s,"_")[[1]][1]==sample_name)] = reads_sum[i,5]
-            }else if(grepl("_2.fasta",filename_s)){
-                next
-            }else if(grepl(".fasta",filename_s)){
-                nvec[which(strsplit(filename_s,"[.]")[[1]][1]==sample_name)] = reads_sum[i,5]
-            }
-        }
-    }else{
-        nvec = reads_sum[,5]
-    }
-}
+# if(ext=="fasta"){
+#     filename = as.character(reads_sum[1, 2])
+#     t_len = length(strsplit(filename,"/")[[1]])
+#     filename_s = strsplit(filename,"/")[[1]][t_len]
+#     if(grepl("_1.fasta",filename_s)){
+#         for(i in 1:nrow(reads_sum)){
+#             filename = as.character(reads_sum[i, 2])
+#             t_len = length(strsplit(filename,"/")[[1]])
+#             filename_s = strsplit(filename,"/")[[1]][t_len]
+#             if(grepl("_1.fasta",filename_s)){
+#                 nvec[which(strsplit(filename_s,"_")[[1]][1]==sample_name)] = reads_sum[i,5]
+#             }else if(grepl("_2.fasta",filename_s)){
+#                 next
+#             }else if(grepl(".fasta",filename_s)){
+#                 nvec[which(strsplit(filename_s,"[.]")[[1]][1]==sample_name)] = reads_sum[i,5]
+#             }
+#         }
+#     }else{
+#         nvec = reads_sum[,5]
+#     }
+# }
 
-if(ext=="fastq"){
-    filename = as.character(reads_sum[1, 2])
-    t_len = length(strsplit(filename,"/")[[1]])
-    filename_s = strsplit(filename,"/")[[1]][t_len]
-    if(grepl("_1.fasta",filename_s)){
-        for(i in 1:nrow(reads_sum)){
-            filename = as.character(reads_sum[i, 2])
-            t_len = length(strsplit(filename,"/")[[1]])
-            filename_s = strsplit(filename,"/")[[1]][t_len]
-            if(grepl("_1.fastq",filename_s)){
-                nvec[which(strsplit(filename_s,"_")[[1]][1]==sample_name)] = reads_sum[i,5]
-            }else if(grepl("_2.fastq",filename_s)){
-                next
-            }else if(grepl(".fastq",filename_s)){
-                nvec[which(strsplit(filename_s,"[.]")[[1]][1]==sample_name)] = reads_sum[i,5]
-            }
-        }
-    }else{
-        nvec = reads_sum[,5]
-    }
-}
+# if(ext=="fastq"){
+#     filename = as.character(reads_sum[1, 2])
+#     t_len = length(strsplit(filename,"/")[[1]])
+#     filename_s = strsplit(filename,"/")[[1]][t_len]
+#     if(grepl("_1.fasta",filename_s)){
+#         for(i in 1:nrow(reads_sum)){
+#             filename = as.character(reads_sum[i, 2])
+#             t_len = length(strsplit(filename,"/")[[1]])
+#             filename_s = strsplit(filename,"/")[[1]][t_len]
+#             if(grepl("_1.fastq",filename_s)){
+#                 nvec[which(strsplit(filename_s,"_")[[1]][1]==sample_name)] = reads_sum[i,5]
+#             }else if(grepl("_2.fastq",filename_s)){
+#                 next
+#             }else if(grepl(".fastq",filename_s)){
+#                 nvec[which(strsplit(filename_s,"[.]")[[1]][1]==sample_name)] = reads_sum[i,5]
+#             }
+#         }
+#     }else{
+#         nvec = reads_sum[,5]
+#     }
+# }
 
 if(length(which(nvec>0.1))!=length(sample_name)){
     cat("Error: sample_name are not matched.");
