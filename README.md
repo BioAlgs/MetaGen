@@ -4,7 +4,7 @@ A test data with 6 microbial species is available at https://figshare.com/articl
 The following is a small example. For the more detailed instruction, please see the software manual. Before running this example, please install all dependent software and packages listed in the manual.
 
 
-#Example 
+##Example 
 
 Download MetaGen and testing data set.
 ```shellscript
