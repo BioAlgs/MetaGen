@@ -1,7 +1,9 @@
 # MetaGen
-A test data with 6 microbial species is availible at https://figshare.com/articles/test-data_zip/3491951
+A test data with 6 microbial species is available at https://figshare.com/articles/test-data_zip/3491951
 
-The following is a small example. For the more detailed instruction, please see the software manual. Before running this example, pleased install all dependent software and packages listed in the manual.
+The following is a small example. For the more detailed instruction, please see the software manual. Before running this example, please install all dependent software and packages listed in the manual.
+
+
 #Example 
 
 Download MetaGen and testing data set.
