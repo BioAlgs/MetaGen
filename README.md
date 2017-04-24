@@ -19,9 +19,9 @@ unzip 5523092
 Set the environment variables for the path of MetaGen, testing data set and work directory as
 ```shellscript
 mkdir work
-metagen=./MetaGen
-metagen_data=./test_data 
-metagen_work_dir=./example
+metagen=[Directory of example]/MetaGen
+metagen_data=[Directory of example]/test_data 
+metagen_work_dir=[Directory of example]/work
 ```
 
 Run assembly using Ray assembler:
