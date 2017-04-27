@@ -65,3 +65,8 @@ Run the statistical deconvolution algorithm to get the binning results and relat
 ```shellscript
 Rscript $metagen/R/metagen.R -m $metagen -w $metagen_work_dir
 ```
+Remark: For large number of species, we recommend to set "bic_step"(using "-s" option) to a larger number such as 5 or 10,  "bic_min" (using "-i" option) to "10" or "50" and "auto_method" (using "-o" option) to 2. This will greatly reduce the computational cost.
+```shellscript
+Do not run
+Rscript $metagen/R/metagen.R -m $metagen -w $metagen_work_dir -s 10 -i 10 -o 2
+```

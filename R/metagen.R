@@ -140,7 +140,11 @@ ind_in = which(lvec>=ctg_len_trim&dmat_rsum>=10)
 
 ###Initialize
 dmat_rsum_hcluster =  dmat_rsum[ind_in]
-hind= which(dmat_rsum_hcluster>quantile(dmat_rsum_hcluster, probs=1-initial_per))
+if(length(ind_in)<20000){
+    hind= which(dmat_rsum_hcluster>quantile(dmat_rsum_hcluster, probs=1-initial_per))
+}else{
+    hind = sample(order(lvec[ind_in], decreasing=T)[1:20000])
+}
 dmat_hcluster = dmat[ind_in,][hind,]
 
 cat("Initializing...\n")
@@ -218,7 +222,6 @@ if(opt$auto_method==1){
     }else{
         opt_num_cluster = which(bic.ratio<0.05)[1] + 2
     }
-
     cat("The optimal number of cluster is",opt_num_cluster,"\n")
 }else if(opt$auto_method==2){
     bic_ind1 = which(bic > (max(bic) - min(bic))*0.05 + min(bic))
@@ -231,9 +234,9 @@ if(opt$auto_method==1){
     a = fit$coef[2]
     c = fit$coef[1]
     opt_num_cluster = round((min(log(bic)) - c)/a)
-
     cat("The optimal number of cluster is",opt_num_cluster,"\n")
 }
+
 
 
 ##Output the BIC graph
@@ -245,7 +248,23 @@ if(plot_bic=="T"){
 
 
 ##Output the cluster label
-segs = apply(ls[[which(vncl==opt_num_cluster)]]$posterior,1,function(x){which.max(x)})
+ncl_in = as.numeric(opt_num_cluster)
+tag_sp = as.numeric(names(sort(table(try_cut),decreasing=T)))[1:ncl_in]
+pmat = NULL
+for(j in tag_sp){
+    if(sum(try_cut==j)>1){
+    temp = apply(dmat_hcluster[which(try_cut==j),],2,sum)
+    }else temp = dmat_hcluster[which(try_cut==j),]
+    pmat = rbind(pmat,temp)
+    # lvec_sp[i]= sum(lvec[which(try_cut==tag_sp[i])])
+}
+pmat = diag(1/apply(pmat,1,sum)) %*% pmat
+multgen = multmixEM(dmat_in, theta =pmat, maxit = 200, epsilon = 1e-03)
+cat("The BIC score for",ncl_in,"clusters finished\n")
+
+
+
+segs = apply(multgen$posterior,1,function(x){which.max(x)})
 
 write.table(cbind(ctg_name[ind_in], segs), file=paste(work_dir,'/output/segs.txt',sep=""), col.names=F, row.names=F)
 
@@ -260,7 +279,7 @@ for(i in 1:opt_num_cluster){
 }
 
 sample_name = colnames(dmat)
-xx = t(ls[[which(vncl==opt_num_cluster)]]$theta)
+xx = t(multgen$theta)
 xmat = t(diag(10^6/nvec) %*% xx %*% diag(sp_tr/sp_len * 1000))
 colnames(xmat) = sample_name
 
@@ -268,6 +287,7 @@ colnames(xmat) = sample_name
 write.table(xmat, file=paste(work_dir,'/output/relative_abundance.txt',sep=""), col.names=T, row.names=F)
 
 cat("Succesffully output the relative abundance matrix.\n")
+
 
 ##Output the relative abundance matrix
 rmat = xmat %*% diag(1/apply(xmat,2,sum))
