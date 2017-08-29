@@ -13,7 +13,6 @@ cd example
 git clone https://github.com/BioAlgs/MetaGen
 wget https://ndownloader.figshare.com/files/5523092
 unzip 5523092
-cd ..
 
 ```
 
