@@ -25,7 +25,7 @@ for f in *.fasta; do
 done
 ```
 
-##Running MetaGen
+### Running MetaGen
 Users can run MetaGen using the following command
 ```shellscript
 cd ..
@@ -67,7 +67,7 @@ Remark: For large number of species, we recommend to set “bic_step”(using �
 
 
 ---
-##(Old Pipline) 
+### (Old Pipline) 
 If users want to MetaGen separately, they can follow the following instructions.
 Set the environment variables for the path of MetaGen, testing data set and work directory as
 ```shellscript
