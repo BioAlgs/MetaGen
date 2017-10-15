@@ -68,7 +68,7 @@ Remark: For large number of species, we recommend to set “bic_step”(using �
 
 ---
 ### (Old Pipline) 
-If users want to MetaGen separately, they can follow the following instructions.
+If users want to run MetaGen separately, they can follow the following instructions.
 Set the environment variables for the path of MetaGen, testing data set and work directory as
 ```shellscript
 mkdir work
