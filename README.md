@@ -25,7 +25,7 @@ for f in *.fasta; do
 done
 ```
 
-###Running MetaGen
+##Running MetaGen
 Users can run MetaGen using the following command
 ```shellscript
 cd ..
@@ -33,7 +33,9 @@ mkdir metagen_work
 ./MetaGen.sh -a -c ./test_data/ray/Contigs.fasta -o ./metagen_work -s ./test_data/read_list.txt 
 ```
 
-where -a denotes that the file type is fasta file (-q for fastq file); -c is the option for the path of assembled contigs file; -o is the option for the path of working directory and -s is the option for the file including the list of sample names for the single-end reads (-p for paired-end reads).
+where -a denotes that the file type is fasta file (-q for fastq file); -c is the option for the path of assembled contigs; -o is the option for the path of working directory and -s is the option for the file including the list of sample names for the single-end reads (-p for paired-end reads).
+
+
 
 More detailed options are listed here
 ```shellscript
@@ -65,7 +67,7 @@ Remark: For large number of species, we recommend to set “bic_step”(using �
 
 
 ---
-###(Old Pipline) 
+##(Old Pipline) 
 If users want to MetaGen separately, they can follow the following instructions.
 Set the environment variables for the path of MetaGen, testing data set and work directory as
 ```shellscript
