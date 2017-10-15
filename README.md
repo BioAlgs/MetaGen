@@ -13,9 +13,60 @@ cd example
 git clone https://github.com/BioAlgs/MetaGen
 wget https://ndownloader.figshare.com/files/5523092
 unzip 5523092
-
 ```
 
+Create file to store sample names.
+```shellscript
+cd ./test_data
+rm read_list.txt
+for f in *.fasta; do 
+   g=$(echo $f |gawk '{gsub(/.*[/]|.fasta/, "", $0)} 1')
+   echo -e "$PWD/$g" >> read_list.txt
+done
+```
+
+###Running MetaGen
+Users can run MetaGen using the following command
+```shellscript
+cd ..
+mkdir metagen_work
+./MetaGen.sh -a -c ./test_data/ray/Contigs.fasta -o ./metagen_work -s ./test_data/read_list.txt 
+```
+
+where -a denotes that the file type is fasta file (-q for fastq file); -c is the option for the path of assembled contigs file; -o is the option for the path of working directory and -s is the option for the file including the list of sample names for the single-end reads (-p for paired-end reads).
+
+More detailed options are listed here
+```shellscript
+Usage:
+    MetaGen.sh [options] -c <contigs> -o <outdir> -p <sample-list>
+Options:
+	-o      Output directory
+	-c      The path to the contigs fasta file
+    -s      the list of single-end sample names
+    -p      the list of paired-ends sample names
+    -q      For fastq files
+    -a      For fasta files
+######## Options for binning
+	-n Number of threads: Specify the number of CPU cores used for parallel computing. When there is a large number of contigs, it is recommended to set multiple CPU cores to accelerate the computation. The default number is 1.
+	-l Specify the minimum number of clusters. The default is 2.
+	-u Specify the maximum number of clusters. The default is 0, which will let the algorithm sets the maximum number of cluster automatically.
+	-e Specify the increment of the number of clusters from bic_min to bic_max. The default is 1.
+	-t Specify the threshold for setting the initial value. It is recommended to set this number smaller(0.01-0.1) when the number of samples is less than $10$ and larger (0.1-0.2) when the number of samples is larger than $10$. The default value is set to 0.1.
+	-i Specify how many percent contigs are used to set the initial value of the algorithm. The default value is 1, which means that all the contigs is used to find initial value of the algorithm. The number can be set to a smaller one, when there are a very large number of contigs.
+	-r Specify the minimum contig length, contigs shorter than this value will not be included. Default is 500.
+	-c If the value is "T", output the plot of BIC scores. The default is "F".
+	-m The value is "1" for the simple metagenomic community. The value is "2" for the complex metagenomic community.
+    -h  This help documentation.
+```
+
+Remark: For large number of species, we recommend to set “bic_step”(using “-e” option) to a larger number such as 5 or 10, “bic_min” (using “-l” option) to “10” or “50” and “auto_method” (using “-m” option) to 2. This will greatly reduce the computational cost.
+
+
+
+
+---
+###(Old Pipline) 
+If users want to MetaGen separately, they can follow the following instructions.
 Set the environment variables for the path of MetaGen, testing data set and work directory as
 ```shellscript
 mkdir work
