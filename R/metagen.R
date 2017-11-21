@@ -68,7 +68,7 @@ fadat = read.fasta(file = ctg_file)
 
 ctg_name = unlist(lapply(getAnnot(fadat), function(x){strsplit(x," ")[[1]][1]}))
 
-lvec = as.numeric(unlist(lapply(getAnnot(fadat), function(x){strsplit(x," ")[[1]][2]})))
+lvec = as.numeric(unlist(lapply(fadat,length)))
 
 nvec = numeric(ncol(dmat))
 
