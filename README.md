@@ -30,7 +30,7 @@ Users can run MetaGen using the following command
 ```shellscript
 cd ..
 mkdir metagen_work
-./MetaGen.sh -a -c ./test_data/ray/Contigs.fasta -o ./metagen_work -s ./test_data/read_list.txt 
+./MetaGen/MetaGen.sh -a -c ./test_data/ray/Contigs.fasta -o ./metagen_work -s ./test_data/read_list.txt 
 ```
 
 where -a denotes that the file type is fasta file (-q for fastq file); -c is the option for the path of assembled contigs; -o is the option for the path of working directory and -s is the option for the file including the list of sample names for the single-end reads (-p for paired-end reads).
