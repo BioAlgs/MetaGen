@@ -54,6 +54,7 @@ ctg_len_trim <- opt$ctg_len_trim
 
 plot_bic<-opt$plot_bic
 
+
 out_dir = paste(work_dir,"/output",sep="")
 source_code = paste(metagen_path,"/src/dist.cpp",sep='')
 
@@ -68,7 +69,8 @@ fadat = read.fasta(file = ctg_file)
 
 ctg_name = unlist(lapply(getAnnot(fadat), function(x){strsplit(x," ")[[1]][1]}))
 
-lvec = as.numeric(unlist(lapply(getAnnot(fadat), function(x){strsplit(x," ")[[1]][2]})))
+# lvec = as.numeric(unlist(lapply(getAnnot(fadat), function(x){strsplit(x," ")[[1]][2]})))
+lvec = as.numeric(unlist(lapply(fadat,length)))
 
 nvec = numeric(ncol(dmat))
 
@@ -277,6 +279,7 @@ for(i in 1:opt_num_cluster){
     sp_len[i] = sum(lvec[ind_in[which(segs==i)]])
     sp_tr[i] = sum(dmat_rsum[ind_in[which(segs==i)]])
 }
+
 
 sample_name = colnames(dmat)
 xx = t(multgen$theta)
